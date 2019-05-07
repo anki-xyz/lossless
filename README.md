@@ -14,7 +14,7 @@ More information about compressions on the [PyTables website](http://www.pytable
     import numpy as np
     
     np.random.seed(42)
-    # Random data (e.g. t, z, x, y)
+    # Random data (e.g. t, z, x, y in 8bit grayscale)
     random_data = (np.random.randn(10, 200, 256, 256) ** 2).astype(np.uint8)
     
     dd.io.save('/path/to/file.h5',
