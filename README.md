@@ -30,12 +30,21 @@ Yes, h264 has a __lossless__ option! Find more information [here](https://trac.f
 The "complicated" thing is to get it working easily.
 The first option is using [imageio](https://imageio.github.io/), a standard library for image import/export in Python:
 
-    io.mimwrite("/path/to/file.mp4", 
-                ims, # images 
-                quality=0, # best, i.e. lossless quality
+    np.random.seed(42)
+    # Random video
+    ims_in = (np.random.randn(200, 256, 256, 3) ** 2).astype(np.uint8)
+    
+    io.mimwrite("file.mp4", 
+                ims_in, # images 
                 codec='libx264rgb', # use the right codec
                 pixelformat='rgb24', # and pixel format
-                output_params=['-crf', '0']) # Ensure setting crf to 0
+                output_params=['-crf', '0', # Ensure setting crf to 0
+                              '-preset', 'ultrafast']) # Maximum compression: veryslow, 
+                                                       # maximum speed: ultrafast
+        
+    ims_out = io.mimread("file.mp4")
+    np.allclose(ims_in, ims_out)
+    # True
 
 The second one is a custom wrapper to FFMPEG that allows more flexibility and control:
 
