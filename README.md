@@ -28,7 +28,7 @@ More information about compressions on the [PyTables website](http://www.pytable
 
 Yes, h264 has a __lossless__ option! Find more information [here](https://trac.ffmpeg.org/wiki/Encode/H.264).
 The "complicated" thing is to get it working easily.
-The first option is using [imageio](), a standard library for image import/export in Python:
+The first option is using [imageio](https://imageio.github.io/), a standard library for image import/export in Python:
 
     io.mimwrite("/path/to/file.mp4", 
                 ims, # images 
