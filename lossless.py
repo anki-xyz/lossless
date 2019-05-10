@@ -97,8 +97,8 @@ class LosslessVideoWriter:
         
         Parameters
         ----------
-        im : [type]
-            [description]
+        im : ndarray
+            the image to be written
         """
         if self.h is None:
             print("No handler open!")
