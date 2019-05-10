@@ -6,10 +6,29 @@ class LosslessVideoWriter:
                  filename, 
                  shape=None, 
                  fps=30, 
-                 codec='libx264', 
+                 codec='libx264rgb', 
                  preset='veryslow', 
                  quality='lossless', 
                  FFMPEG_DIR=r"C:\ffmpeg\bin"):
+        """VideoWriter using ffmpeg
+        
+        Parameters
+        ----------
+        filename : str
+            The file to be written, e.g. test.mp4
+        shape : tuple (w,h), optional
+            the image shape, by default None
+        fps : int, optional
+            frames per second, by default 30
+        codec : str, optional
+            codec used by FFMPEG, by default 'libx264rgb'
+        preset : str, optional
+            mode, e.g. 'ultrafast', by default 'veryslow'
+        quality : str or int, optional
+            -crf flag of FFMPEG (0-96), by default 'lossless' = 0
+        FFMPEG_DIR : str, optional
+            FFMPEG bin directory, by default r"C:\ffmpeg\bin"
+        """
         
         ### FFMPEG Dependencies ###
         self.FFMPEG_DIR = FFMPEG_DIR
@@ -27,6 +46,13 @@ class LosslessVideoWriter:
         self.preset = preset
         
     def mimwrite(self, ims):
+        """Writes multiple images to file (similar to imageio.mimwrite)
+        
+        Parameters
+        ----------
+        ims : list or np.ndarray
+            Images to be written
+        """
         if type(ims) != list and type(ims) != np.ndarray:
             assert False, "provide images as list or ndarray"
         
@@ -42,6 +68,8 @@ class LosslessVideoWriter:
         
 
     def open(self):
+        """Opens handler with settings provided
+        """
         assert self.shape != None, "provide an image shape!"
         
         command = [self.FFMPEG_EXE,
@@ -65,12 +93,25 @@ class LosslessVideoWriter:
                         bufsize=10**8)
 
     def write(self, im):
+        """Writes image to handler
+        
+        Parameters
+        ----------
+        im : [type]
+            [description]
+        """
+        if self.h is None:
+            print("No handler open!")
+            return
+
         if type(im) == np.ndarray:
             im = im.tobytes()
 
         self.h.stdin.write(im)
 
     def close(self):
+        """Closes handler
+        """
         if self.h:
             self.h.stdin.close()
             self.h.communicate()
