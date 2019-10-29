@@ -6,20 +6,20 @@ Here are two ways to store data compressed.
 ## HDF5
 
 The _de facto_ standard is [hdf5](https://www.hdfgroup.org/solutions/hdf5/).
-Using [h5py](https://www.h5py.org/) or [deepdish](https://deepdish.readthedocs.io/en/latest/api_io.html), it is fairly easy to store arbitrary data structures.
-More information about compressions on the [PyTables website](http://www.pytables.org/usersguide/optimization.html?highlight=compression).
+Using [h5py](https://www.h5py.org/), [deepdish](https://deepdish.readthedocs.io/en/latest/api_io.html) or [flammkuchen](https://github.com/portugueslab/flammkuchen), it is fairly easy to store arbitrary data structures.
+More information about compressions on the [PyTables website](http://www.pytables.org/usersguide/optimization.html?highlight=compression). Deepdish has had issues with latest pandas versions, so I recommend using flammkuchen instead. HDF5 files can by the way store arbitrary data (see flammkuchen website).
 
 
-    import deepdish as dd
+    import flammkuchen as fl
     import numpy as np
     
     np.random.seed(42)
     # Random data (e.g. t, z, x, y in 8bit grayscale)
     random_data = (np.random.randn(10, 200, 256, 256) ** 2).astype(np.uint8)
     
-    dd.io.save('/path/to/file.h5',
-              {'arbitrary_key': random_data},
-              compression=('blosc', 4)) # algorithm (str), compression strength (int)
+    fl.save('/path/to/file.h5',
+            {'arbitrary_key': random_data},
+            compression=('blosc', 4)) # algorithm (str), compression strength (int)
     
     # Uncompressed: 128 MB
     # Compressed: 69 MB
